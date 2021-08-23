@@ -3,5 +3,140 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-  }
+    "mylib": {
+      "projectType": "library",
+      "root": "projects/mylib",
+      "sourceRoot": "projects/mylib/src",
+      "prefix": "ml",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/mylib/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/mylib/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/mylib/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/mylib/src/test.ts",
+            "tsConfig": "projects/mylib/tsconfig.spec.json",
+            "karmaConfig": "projects/mylib/karma.conf.js"
+          }
+        }
+      }
+    },
+    "myapp": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        },
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "root": "projects/myapp",
+      "sourceRoot": "projects/myapp/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/myapp",
+            "index": "projects/myapp/src/index.html",
+            "main": "projects/myapp/src/main.ts",
+            "polyfills": "projects/myapp/src/polyfills.ts",
+            "tsConfig": "projects/myapp/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/myapp/src/favicon.ico",
+              "projects/myapp/src/assets"
+            ],
+            "styles": [
+              "projects/myapp/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "projects/myapp/src/environments/environment.ts",
+                  "with": "projects/myapp/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "myapp:build:production"
+            },
+            "development": {
+              "browserTarget": "myapp:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "myapp:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/myapp/src/test.ts",
+            "polyfills": "projects/myapp/src/polyfills.ts",
+            "tsConfig": "projects/myapp/tsconfig.spec.json",
+            "karmaConfig": "projects/myapp/karma.conf.js",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/myapp/src/favicon.ico",
+              "projects/myapp/src/assets"
+            ],
+            "styles": [
+              "projects/myapp/src/styles.scss"
+            ],
+            "scripts": []
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "mylib"
 }
